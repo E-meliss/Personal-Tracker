@@ -16,6 +16,11 @@ func main() {
         dbPath = "./tracker.db"
     }
 
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+
     database, err := db.Open(dbPath)
     if err != nil {
         log.Fatal(err)
@@ -30,7 +35,7 @@ func main() {
     h := handlers.TaskHandlers{DB: database}
     h.Register(r)
 
-    addr := ":8080"
+    addr := ":" + port
     log.Printf("API running on %s (DB: %s)", addr, dbPath)
     if err := r.Run(addr); err != nil {
         log.Fatal(err)
